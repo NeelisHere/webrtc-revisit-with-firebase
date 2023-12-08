@@ -17,9 +17,10 @@ const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
 
 export const newChannelEntry = async (roomId, payload) => {
-    const userdbRef = ref(db, `Channels/${roomId}`)
+    const channeldbRef = ref(db, `Channels/${roomId}`)
+    console.log(payload)
     try {
-        await push(userdbRef, payload)
+        await push(channeldbRef, payload)
         console.log('Added channel entry.')
     } catch (error) {
         console.log('Couldn\'t add channel entry.')

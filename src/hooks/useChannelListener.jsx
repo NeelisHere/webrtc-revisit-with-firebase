@@ -9,7 +9,7 @@ export const useChannelListener = (channelId) => {
         const unsubscribe = onValue(channelRef, (snapshot) => {
             let data = snapshot.val()
             data = Object.entries(data).map(
-                ([channelId, { payload, sender, type }]) => ({ channelId, payload, sender, type })
+                ([channelId, { sdp }]) => ({ channelId, sdp })
             )
             setOffers(data)
         })

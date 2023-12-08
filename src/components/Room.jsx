@@ -1,25 +1,24 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useLoggedinUser } from "../providers/UserProvider"
-import { leaveRoom, newChannelEntry } from "../utils/firebase"
+import { leaveRoom } from "../utils/firebase"
 import { nanoid } from "nanoid"
 import { useChannelListener } from "../hooks/useChannelListener"
+import { useRef } from "react"
+import { useWebRTC } from "../hooks/useWebRTC"
+// import WebRTC from "../utils/WebRTC"
 
 const Room = () => {
 	const { roomId } = useParams()
 	const { user } = useLoggedinUser()
 	const navigate = useNavigate()
 	const { offers } = useChannelListener(roomId)
+	const localWebcamRef = useRef(null)
+    const remoteWebcamRef = useRef(null)
+	useWebRTC({ roomId, userId: user, localWebcamRef, remoteWebcamRef })
 
-	const handleSend = (e) => {
+	const handleSend = async (e) => {
 		e.preventDefault()
-		const payload = {
-			sender: user,
-			type: 'offer/ice',
-			payload: { success: true }
-		}
-		newChannelEntry(roomId, payload)
 	}
-
 	const handleLeave = () => {
 		leaveRoom(roomId, user)
 		navigate('/')
@@ -35,18 +34,18 @@ const Room = () => {
 			<div className="video-call-container">
 				<div className="single-webcam-details">
 					<p>Local Stream</p>
-					<video className="webcam-feed" autoPlay playsInline></video>
+					<video ref={localWebcamRef} className="webcam-feed" autoPlay playsInline></video>
 					<button onClick={handleSend}>Send</button>
 				</div>
 				<div className="single-webcam-details">
 					<p>Remote Stream</p>
-					<video className="webcam-feed" autoPlay playsInline></video>
-					<button onClick={() => {}}>Send</button>
+					<video ref={remoteWebcamRef} className="webcam-feed" autoPlay playsInline></video>
+					<button onClick={() => { }}>Send</button>
 				</div>
 			</div>
 			<div>
 				{
-					offers?.map(({ channelId }) => <p key={nanoid()}>{channelId}</p>)
+					offers?.map(({ sdp }) => <p key={nanoid()}>{sdp}</p>)
 				}
 			</div>
 		</div>
