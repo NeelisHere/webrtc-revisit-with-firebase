@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useLoggedinUser } from "../providers/UserProvider"
 import { leaveRoom } from "../utils/firebase"
-import { nanoid } from "nanoid"
-import { useChannelListener } from "../hooks/useChannelListener"
+// import { nanoid } from "nanoid"
+// import { useChannelListener } from "../hooks/useChannelListener"
 import { useRef } from "react"
 import { useWebRTC } from "../hooks/useWebRTC"
 // import WebRTC from "../utils/WebRTC"
@@ -11,7 +11,7 @@ const Room = () => {
 	const { roomId } = useParams()
 	const { user } = useLoggedinUser()
 	const navigate = useNavigate()
-	const { offers } = useChannelListener(roomId)
+	// const { offers } = useChannelListener(roomId)
 	const localWebcamRef = useRef(null)
     const remoteWebcamRef = useRef(null)
 	useWebRTC({ roomId, userId: user, localWebcamRef, remoteWebcamRef })
@@ -45,7 +45,7 @@ const Room = () => {
 			</div>
 			<div>
 				{
-					offers?.map(({ sdp }) => <p key={nanoid()}>{sdp}</p>)
+					// offers?.map(({ sdp }) => <p key={nanoid()}>{sdp}</p>)
 				}
 			</div>
 		</div>
