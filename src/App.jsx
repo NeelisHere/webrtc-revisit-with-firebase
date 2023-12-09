@@ -1,17 +1,12 @@
-import Room from './components/Room'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Lobby from './components/Lobby'
+import Home from './pages/Home'
 import UserProvider from './providers/UserProvider'
 
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <Lobby />
+		element: <Home />
 	},
-	{
-		path: `/room/:roomId`,
-		element: <Room />
-	}
 ])
 
 function App() {
