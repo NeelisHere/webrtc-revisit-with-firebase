@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home'
-import UserProvider from './providers/UserProvider'
+import ContextProvider from './providers/ContextProvider'
 
 const router = createBrowserRouter([
 	{
@@ -12,9 +12,9 @@ const router = createBrowserRouter([
 function App() {
 
 	return (
-		<UserProvider>
+		<ContextProvider>
 			<RouterProvider router={router} />
-		</UserProvider>
+		</ContextProvider>
 	)
 }
 

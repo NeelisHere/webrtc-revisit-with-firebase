@@ -4,15 +4,15 @@ import Options from '../components/Options'
 import VideoPlayer from '../components/VideoPlayer'
 
 const App = () => {
-    return (
-        <Box>
-          <Container maxW="1200px" mt="8">
-            <Heading as="h2" size="2xl"> Video Chat App </Heading>
-            <VideoPlayer />
-            <Options />
-            <Notifications />
-          </Container>
-        </Box>
-    );
+	return (
+		<Box>
+			<Container maxW="1200px" mt="8">
+				<Heading as="h2" size="2xl"> Video Chat App </Heading>
+				<VideoPlayer />
+				<Options />
+				<Notifications />
+			</Container>
+		</Box>
+	);
 }
 export default App;
