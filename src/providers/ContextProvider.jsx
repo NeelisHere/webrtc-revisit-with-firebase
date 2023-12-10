@@ -28,7 +28,10 @@ const ContextProvider = ({ children }) => {
                 myVideo.current.srcObject = currentStream
             }
         })
-        socket.on('me', (id) => setMe(id))
+        socket.on('me', (id) => {
+            console.log(`my-socket-id: ${id}`)
+            setMe(id)
+        })
         socket.on('callUser', ({ from, name: callerName, signal }) => {
             setCall({ isReceivingCall: true, from, name: callerName, signal })
         })
@@ -48,7 +51,7 @@ const ContextProvider = ({ children }) => {
     }, [call.from, call.signal, stream])
 
     const callUser = (id) => {
-        const peer = new Peer({ initiator: false, trickle: false, stream })
+        const peer = new Peer({ initiator: true, trickle: false, stream })
         peer.on('signal', (data) => {
             socket.emit('callUser', {
                 userToCall: id,
