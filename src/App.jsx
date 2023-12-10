@@ -1,20 +1,37 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Home from './pages/Home'
-import ContextProvider from './providers/ContextProvider'
+// import Home from './pages/Home'
+import Lobby from './components/Lobby'
+import Room from './components/Room'
+// import ContextProvider from './providers/ContextProvider'
+import SocketProvider from './providers/SocketProvider'
+
+// const router = createBrowserRouter([
+// 	{
+// 		path: '/',
+// 		element: <Home />
+// 	},
+// ])
 
 const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <Home />
+		element: <Lobby />
+	},
+	{
+		path: '/room/:roomId',
+		element: <Room />
 	},
 ])
 
 function App() {
 
 	return (
-		<ContextProvider>
+		// <ContextProvider>
+		// 	<RouterProvider router={router} />
+		// </ContextProvider>
+		<SocketProvider>
 			<RouterProvider router={router} />
-		</ContextProvider>
+		</SocketProvider>
 	)
 }
 

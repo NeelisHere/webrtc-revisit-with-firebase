@@ -1,33 +1,31 @@
-import { useRef } from "react"
-import { useLoggedinUser } from "../providers/UserProvider"
+import { useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { newRoomEntry } from '../utils/firebase'
+import { useSocket } from "../providers/SocketProvider"
+import { Box, Button, Input, Text } from "@chakra-ui/react"
 
 const Lobby = () => {
     const roomRef = useRef(null)
-    const userRef = useRef(null)
-    const { setUser } = useLoggedinUser()
     const navigate = useNavigate()
+    const { socket, setMyId } = useSocket()
+
+    useEffect(() => {
+        socket.on('me', (socketId) => setMyId(socketId))
+        return () => {
+            socket.off('me')
+        }
+    }, [setMyId, socket])
 
     const handleEnterRoom = () => {
         const roomId = roomRef.current.value
-        const userId = userRef.current.value
-        // newChannelEntry(roomId, userId)
-        newRoomEntry(roomId, userId)
-        setUser(userId)
+        socket.emit('join-room', { roomId })
         navigate(`/room/${roomId}`)
     }
-
     return (
-        <div>
-            <label htmlFor="room-id">Room:</label>
-            <input ref={roomRef} type="number" id="room-id" />
-
-            <label htmlFor="user-id">User:</label>
-            <input ref={userRef} type="number" id="user-id" />
-
-            <button onClick={handleEnterRoom}>Enter Room</button>
-        </div>
+        <Box gap={5} w={'300px'} m={'0 auto'} border={'2px solid blue'} padding={'10px'} display={'flex'} flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
+            <Text>Room:</Text>
+            <Input variant={'filled'} ref={roomRef} type="number" />
+            <Button colorScheme="teal" onClick={handleEnterRoom}>Enter Room</Button>
+        </Box>
     )
 }
 

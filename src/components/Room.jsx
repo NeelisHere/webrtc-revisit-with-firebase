@@ -1,54 +1,67 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useLoggedinUser } from "../providers/UserProvider"
-import { leaveRoom } from "../utils/firebase"
-// import { nanoid } from "nanoid"
-// import { useChannelListener } from "../hooks/useChannelListener"
-import { useRef } from "react"
-import { useWebRTC } from "../hooks/useWebRTC"
-// import WebRTC from "../utils/WebRTC"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useSocket } from "../providers/SocketProvider"
+import { Box, Button, Input, Text } from "@chakra-ui/react"
 
 const Room = () => {
 	const { roomId } = useParams()
-	const { user } = useLoggedinUser()
 	const navigate = useNavigate()
-	// const { offers } = useChannelListener(roomId)
+	const { myId } = useSocket()
+	const [localStream, setLocalStream] = useState(null)
+	const [remoteStream, setRemoteStream] = useState(null)
 	const localWebcamRef = useRef(null)
-    const remoteWebcamRef = useRef(null)
-	useWebRTC({ roomId, userId: user, localWebcamRef, remoteWebcamRef })
+	const remoteWebcamRef = useRef(null)
 
-	const handleSend = async (e) => {
-		e.preventDefault()
-	}
+	const captureLocalStream = useCallback(async() => {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({
+				video: true, audio: false,
+			})
+			setLocalStream(stream)
+			localWebcamRef.current.srcObject = stream
+		} catch (error) {
+			console.log(error)
+		}
+	}, [])
+
+	useEffect(() => {
+		captureLocalStream()
+	}, [captureLocalStream])
+
 	const handleLeave = () => {
-		leaveRoom(roomId, user)
 		navigate('/')
 	}
 
+	const handleCall = () => {
+
+	}
+
 	return (
-		<div>
-			<div className="heading">
-				<h1>User: {user}</h1>
-				<h2>Room: {roomId}</h2>
-				<button onClick={handleLeave}>Leave</button>
-			</div>
-			<div className="video-call-container">
-				<div className="single-webcam-details">
-					<p>Local Stream</p>
+		<Box w={'700px'} m={'0 auto'}>
+			<Box gap={3} border={'2px solid blue'} padding={'10px'} m={'10px'} display={'flex'} flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
+				<Text fontSize={'2xl'} fontWeight={"bold"}>User: {myId}</Text>
+				<Text fontSize={'xl'} fontWeight="bold">Room: {roomId}</Text>
+				<Button colorScheme="red" onClick={handleLeave}>Leave</Button>
+			</Box>
+			<Box border={'2px solid blue'} padding={'10px'} m={'10px'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+				<Box border={'2px solid blue'} padding={'10px'} m={'10px'} display={'flex'} flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
+					<Text>Local Stream</Text>
 					<video ref={localWebcamRef} className="webcam-feed" autoPlay playsInline></video>
-					<button onClick={handleSend}>Send</button>
-				</div>
-				<div className="single-webcam-details">
-					<p>Remote Stream</p>
+				</Box>
+				<Box gap={4} border={'2px solid blue'} padding={'10px'} m={'10px'} display={'flex'} flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
+					<Text>Whom to call?</Text>
+					<Input variant={'filled'} placeholder="Enter user-id to be called" />
+					<Button onClick={handleCall}>Call</Button>
+				</Box>
+			</Box>
+			<Box>
+				<Box border={'2px solid blue'} padding={'10px'} m={'10px'} display={'flex'} flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
+					<Text>Remote Stream</Text>
 					<video ref={remoteWebcamRef} className="webcam-feed" autoPlay playsInline></video>
-					<button onClick={() => { }}>Send</button>
-				</div>
-			</div>
-			<div>
-				{
-					// offers?.map(({ sdp }) => <p key={nanoid()}>{sdp}</p>)
-				}
-			</div>
-		</div>
+					<Button onClick={() => { }}>Send</Button>
+				</Box>
+			</Box>
+		</Box>
 
 	)
 }
