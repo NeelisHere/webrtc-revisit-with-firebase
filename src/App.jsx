@@ -3,7 +3,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Lobby from './components/Lobby'
 import Room from './components/Room'
 // import ContextProvider from './providers/ContextProvider'
-import SocketProvider from './providers/SocketProvider'
+// import SocketProvider from './providers/SocketProvider'
+import PeerProvider from './providers/PeerProvider'
 
 // const router = createBrowserRouter([
 // 	{
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
 		element: <Lobby />
 	},
 	{
-		path: '/room/:roomId',
+		path: '/room',
 		element: <Room />
 	},
 ])
@@ -26,12 +27,9 @@ const router = createBrowserRouter([
 function App() {
 
 	return (
-		// <ContextProvider>
-		// 	<RouterProvider router={router} />
-		// </ContextProvider>
-		<SocketProvider>
+		<PeerProvider>
 			<RouterProvider router={router} />
-		</SocketProvider>
+		</PeerProvider>
 	)
 }
 
