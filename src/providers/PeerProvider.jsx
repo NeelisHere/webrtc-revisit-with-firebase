@@ -38,8 +38,8 @@ const PeerProvider = ({ children }) => {
             console.log(call)
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-                myWebcamRef.current.srcObject = stream
-                myWebcamRef.current.play()
+                // myWebcamRef.current.srcObject = stream
+                // myWebcamRef.current.play()
                 call.answer(stream)
                 call.on('stream', (remoteStream) => {
                     remoteWebcamRef.current.srcObject = remoteStream

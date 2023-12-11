@@ -10,8 +10,8 @@ const Room = () => {
 	const handleCall = async () => {
 		try {
 			const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-			remoteWebcamRef.current.srcObject = stream;
-			remoteWebcamRef.current.play();
+			// remoteWebcamRef.current.srcObject = stream;
+			// remoteWebcamRef.current.play();
 
 			const call = peerInstance.current.call(remotePeerId, stream)
 
@@ -46,7 +46,7 @@ const Room = () => {
 				<Box border={'2px solid blue'} padding={'10px'} m={'10px'} display={'flex'} flexDir={'column'} alignItems={'center'} justifyContent={'center'}>
 					<Text>Remote Stream</Text>
 					<video ref={remoteWebcamRef} className="webcam-feed" autoPlay playsInline></video>
-					<Button onClick={() => { }}>Send</Button>
+					{/* <Button onClick={() => { }}>Send</Button> */}
 				</Box>
 			</Box>
 		</Box>
